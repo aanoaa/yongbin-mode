@@ -10,6 +10,7 @@
   (if yongbin-mode
       (add-hook 'pre-command-hook 'yongbinize)
     (remove-hook 'pre-command-hook 'yongbinize)))
+
 (if (not (assq 'yongbin-mode minor-mode-alist))
     (setq minor-mode-alist
           (cons '(yongbin-mode " Yongbin")
