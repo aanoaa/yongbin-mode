@@ -1,0 +1,54 @@
+#!/usr/bin/env perl
+use strict;
+use warnings;
+use Getopt::Long;
+use Pod::Usage;
+use Encode qw/decode_utf8/;
+
+use lib '/home/aanoaa/repo/aanoaa/yongbin-mode/lib';
+use Yongbinize;
+
+binmode STDOUT, ':utf8';
+
+my $HOME = $ENV{HOME};
+my %options;
+GetOptions( \%options, "--help", "--text=s" );
+
+run( \%options, @ARGV );
+
+sub run {
+    my ( $opts, @args ) = @_;
+    return pod2usage(0) if $opts->{help};
+
+    my $content;
+    if ( my $text = $opts->{text} ) {
+        $content = decode_utf8($text);
+    }
+    elsif ( @args == 0 or $args[0] eq '-' ) {
+        $content = decode_utf8( join '', <STDIN> );
+    }
+    else {
+        open my $fh, '<:encoding(UTF-8)', $args[0]
+          or die "Cannot open $!";
+
+        $content = do { local $/; <$fh> };
+    }
+
+    print yongbinize($content);
+}
+
+__END__
+
+=encoding utf8
+
+=head1 NAME
+
+yb - yongbinize file
+
+=head1 SYNOPSIS
+
+    $ yb --text "안녕하세요"
+    $ echo "안녕하세요" | yb
+    $ yb file
+
+=cut
