@@ -51,9 +51,19 @@
 (defun yongbinize-buffer ()
   (interactive)
   (yongbinize-cleanup-buffer)
+  (yongbinize-region (point-min) (point-max)))
+
+(defun yongbinize-line ()
+  (interactive)
+  (yongbinize-cleanup-buffer)
+  (yongbinize-region (line-beginning-position) (line-end-position)))
+
+(defun yongbinize-region (start end)
+  (interactive "r")
+  (yongbinize-cleanup-buffer)
   (shell-command-on-region
    ;; beginning and end of buffer(STDIN)
-   (point-min) (point-max)
+   start end
    ;; command and parameter
    yongbinize-command
    ;; output buffer
