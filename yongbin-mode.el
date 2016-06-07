@@ -1,13 +1,19 @@
-;;; Code:
-(defun yongbin-e-or-ae-p (char)
-  (or (string= char "ㅔ")
-      (string= char "ㅐ")))
+(defvar yongbin-mode nil "Mode variable for yongbin minor mode.")
+(make-variable-buffer-local 'yongbin-mode)
 
-(defun yongbin-swap-e-and-ae (char)
-  "Swap ㅔ and ㅐ"
-  (cond ((string= char "ㅐ") "ㅔ")
-        ((string= char "ㅔ") "ㅐ")
-        (t char)))
+(defun yongbin-mode (&optional arg)
+  "Make self-inserting keys swap ㅔ and ㅐ"
+  (interactive "P")
+  (setq yongbin-mode
+        (if (null arg) (not yongbin-mode)
+          (> (prefix-numeric-value arg) 0)))
+  (if yongbin-mode
+      (add-hook 'pre-command-hook 'yongbinize)
+    (remove-hook 'pre-command-hook 'yongbinize)))
+(if (not (assq 'yongbin-mode minor-mode-alist))
+    (setq minor-mode-alist
+          (cons '(yongbin-mode " Yongbin")
+                minor-mode-alist)))
 
 (defun yongbinize ()
   "Insert the character you type, but swap ㅔ and ㅐ."
