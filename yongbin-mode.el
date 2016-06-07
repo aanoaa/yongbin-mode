@@ -75,4 +75,21 @@
    ;; show error buffer?
    t))
 
+(defun erc-yongbinize ()
+  (interactive)
+  (yongbinize-line)
+  (with-current-buffer yongbinize-buffer-name
+    (goto-char (point-min))
+    (setq yongbinized-text (buffer-substring (line-beginning-position) (line-end-position))))
+  (goto-char (line-beginning-position))
+  (paredit-kill)
+  (insert yongbinized-text))
+
+(defun erc-send-current-yongbinize-line ()
+  (interactive)
+  (erc-yongbinize)
+  (erc-send-current-line))
+
+(define-key erc-mode-map (kbd "RET") 'erc-send-current-yongbinize-line)
+
 (provide 'yongbin-mode)
