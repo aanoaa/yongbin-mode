@@ -16,13 +16,14 @@
                  (eq this-command (key-binding [remap self-insert-command]))))
     (setq last-command-event (yongbin-swap-e-and-ae last-command-event))))
 
-;;;###autoload
-(define-minor-mode yongbin-mode
-  "Make self-inserting keys swap ㅔ and ㅐ"
-  :global t
-  (if yongbin-mode
-      (add-hook 'pre-command-hook #'yongbinize)
-    (remove-hook 'pre-command-hook #'yongbinize)))
+(defun yongbin-e-or-ae-p (char)
+  (or (char-equal char ?ㅔ)
+      (char-equal char ?ㅐ)))
+
+(defun yongbin-swap-e-and-ae (char)
+  "Swap ㅔ and ㅐ"
+  (cond ((char-equal char ?ㅔ) ?ㅐ)
+        ((char-equal char ?ㅐ) ?ㅔ)
+        (t char)))
 
 (provide 'yongbin-mode)
-;;; yongbin-mode.el ends here
