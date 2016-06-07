@@ -8,8 +8,8 @@
         (if (null arg) (not yongbin-mode)
           (> (prefix-numeric-value arg) 0)))
   (if yongbin-mode
-      (add-hook 'pre-command-hook 'yongbin-swap)
-    (remove-hook 'pre-command-hook 'yongbin-swap)))
+      (define-key erc-mode-map (kbd "RET") 'erc-send-current-yongbinize-line)
+    (define-key erc-mode-map (kbd "RET") 'erc-send-current-line)))
 
 (if (not (assq 'yongbin-mode minor-mode-alist))
     (setq minor-mode-alist
@@ -93,3 +93,5 @@
 (define-key erc-mode-map (kbd "RET") 'erc-send-current-yongbinize-line)
 
 (provide 'yongbin-mode)
+
+(add-hook 'erc-mode-hook 'yongbin-mode)
