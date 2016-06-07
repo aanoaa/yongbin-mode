@@ -33,4 +33,24 @@
         ((char-equal char ?ㅐ) ?ㅔ)
         (t char)))
 
+(defcustom yongbin-command "yb"
+  "Yongbinized command."
+  :type 'string)
+
+(defun yongbinize-buffer ()
+  (interactive)
+  (shell-command-on-region
+   ;; beginning and end of buffer(STDIN)
+   (point-min) (point-max)
+   ;; command and parameter
+   yongbin-command
+   ;; output buffer
+   (current-buffer)
+   ;; replace?
+   t
+   ;; name of error buffer
+   "*yongbinize Error*"
+   ;; show error buffer?
+   t))
+
 (provide 'yongbin-mode)
