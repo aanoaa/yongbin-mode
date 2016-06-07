@@ -33,21 +33,33 @@
         ((char-equal char ?ㅐ) ?ㅔ)
         (t char)))
 
-(defcustom yongbin-command "yb"
-  "Yongbinized command."
+(defcustom yongbinize-command "yb"
+  "yongbinized command."
   :type 'string)
+
+(defcustom yongbinize-buffer-name "*yongbinized*"
+  "buffer name of yongbinized."
+  :type 'string)
+
+(defun yongbinize-cleanup-buffer ()
+  (let ((buffer (get-buffer yongbinize-buffer-name)))
+    (when buffer
+      (with-current-buffer buffer
+        (setq buffer-read-only nil)
+        (erase-buffer)))))
 
 (defun yongbinize-buffer ()
   (interactive)
+  (yongbinize-cleanup-buffer)
   (shell-command-on-region
    ;; beginning and end of buffer(STDIN)
    (point-min) (point-max)
    ;; command and parameter
-   yongbin-command
+   yongbinize-command
    ;; output buffer
-   (current-buffer)
+   yongbinize-buffer-name
    ;; replace?
-   t
+   nil
    ;; name of error buffer
    "*yongbinize Error*"
    ;; show error buffer?
